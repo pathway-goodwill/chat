@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/gif/png" href="/Images/state logo.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page - State</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('backgroundperma.PNG');
+            background-size: cover;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .chat-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            max-width: 300px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            cursor: move;
+        }
+
+        #messages {
+            list-style: none;
+            padding: 10px;
+            margin: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #f4f4f4;
+            border-radius: 0 0 5px 5px;
+        }
+
+        #messages li {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .username {
+            font-weight: bold;
+            color: #4e0ecb;
+            margin-right: 5px;
+        }
+
+        form {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        #message-input {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+
+        button:hover {
+            background: #4e0ecb;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+   <div class="chat-container" id="chat-container">
+        <ul id="messages"></ul>
+        <form id="chat-form">
+            <input id="message-input" placeholder="Type a message..." autocomplete="off" />
+            <button>Send</button>
+        </form>
+    </div>
+
+    <!-- Firebase App and Database -->
+    <script type="module">
+        // Import the Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+        import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBapP3ABMNQ16ArkZ2Dxfg2UScg0FY_FNQ",
+            authDomain: "chat-2b69f.firebaseapp.com",
+            databaseURL: "https://chat-2b69f-default-rtdb.firebaseio.com",
+            projectId: "chat-2b69f",
+            storageBucket: "chat-2b69f.firebasestorage.app",
+            messagingSenderId: "212124817860",
+            appId: "1:212124817860:web:cf64e0d60a960ba87e2c91",
+            measurementId: "G-KFYK7F3385"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // References
+        const messagesRef = ref(db, "messages");
+
+        // Generate a random name for the participant
+        const generateRandomName = () => {
+            const colors = ["Red", "Blue", "Green", "Yellow", "Purple"];
+            const animals = ["Tiger", "Lion", "Bear", "Fox", "Wolf"];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const animal = animals[Math.floor(Math.random() * animals.length)];
+            const number = Math.floor(Math.random() * 100);
+            return `${color}${animal}${number}`;
+        };
+
+        const username = generateRandomName();
+
+        // Get elements
+        const messages = document.getElementById("messages");
+        const form = document.getElementById("chat-form");
+        const input = document.getElementById("message-input");
+
+        // Listen for new messages
+        onChildAdded(messagesRef, (snapshot) => {
+            const message = snapshot.val();
+            const item = document.createElement("li");
+            const userSpan = document.createElement("span");
+            userSpan.textContent = message.username;
+            userSpan.className = "username";
+
+            const textSpan = document.createElement("span");
+            textSpan.textContent = `: ${message.text}`;
+
+            item.appendChild(userSpan);
+            item.appendChild(textSpan);
+
+            messages.appendChild(item);
+            messages.scrollTop = messages.scrollHeight; // Auto-scroll
+        });
+
+        // Send a new message
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const text = input.value.trim();
+            if (text) {
+                push(messagesRef, { username, text });
+                input.value = "";
+            }
+        });
+
+        // Draggable functionality
+        const chatContainer = document.getElementById("chat-container");
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        chatContainer.addEventListener("mousedown", (e) => {
+            isDragging = true;
+            offsetX = e.clientX - chatContainer.getBoundingClientRect().left;
+            offsetY = e.clientY - chatContainer.getBoundingClientRect().top;
+            chatContainer.style.cursor = "grabbing";
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            if (isDragging) {
+                const x = e.clientX - offsetX;
+                const y = e.clientY - offsetY;
+                chatContainer.style.left = `${x}px`;
+                chatContainer.style.top = `${y}px`;
+            }
+        });
+
+        document.addEventListener("mouseup", () => {
+            isDragging = false;
+            chatContainer.style.cursor = "move";
+        });
+    </script>
+</body>
+</html>
