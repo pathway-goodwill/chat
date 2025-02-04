@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" type="image/gif/png" href="logoperma.png">
+<link rel="icon" type="image/gif/png" href="logoperma.pngG">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home Page - State</title>
+  <title>home Page - State</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -63,7 +63,7 @@
     }
 
     .displayMessage {
-        font-size: 12px;
+        font-size: 10px;
         color: #959399
     }
 
@@ -112,14 +112,14 @@
 <body>
   <div class="chat-container" id="chat-container">
     <div class="chat-header">
-  <span>State Message</span>
+      <span>Real-Time Messaging</span>
       <button id="minimize-button">−</button>
     </div>
     <div class="chat-body" id="chat-body">
       <div class="displayMessage" id="messages"></div>
     </div>
     <div class="chat-footer">
-      <input type="text" id="message-input" >
+      <input type="text" id="message-input" placeholder="Type a message..." />
       <button id="send-button">Send</button>
     </div>
   </div>
@@ -128,8 +128,8 @@
   <script>
     // Generate a random name for the user
     const generateRandomName = () => {
-      const colors = ["Red", "Blue", "Grn", "ylw", "wht"];
-      const animals = ["dog", "cat", "rat", "Fox", "user"];
+      const colors = ["Red", "Blue", "Green", "Yellow", "Purple"];
+      const animals = ["Tiger", "Lion", "Bear", "Fox", "Wolf"];
       const color = colors[Math.floor(Math.random() * colors.length)];
       const animal = animals[Math.floor(Math.random() * animals.length)];
       const number = Math.floor(Math.random() * 100);
@@ -161,7 +161,7 @@
         // Listen for messages
         room.on('message', (message) => {
           const messageElement = document.createElement('div');
-          messageElement.textContent = `${message.data.username}: ${message.data.text}`;
+          messageElement.innerHTML = `<strong style="color: #4b4a4d; font-weight: bold;">${message.data.username}:</strong> <span style="color: #7c7a80; font-weight: lighter;">${message.data.text}</span>`;
           messages.appendChild(messageElement);
           chatBody.scrollTop = chatBody.scrollHeight; // Auto scroll to bottom
         });
