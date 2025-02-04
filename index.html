@@ -161,7 +161,7 @@
         // Listen for messages
         room.on('message', (message) => {
           const messageElement = document.createElement('div');
-          messageElement.innerHTML = `<strong style="color: #4b4a4d; font-weight: bold;">${message.data.username}:</strong> <span style="color: #7c7a80; font-weight: lighter;">${message.data.text}</span>`;
+          messageElement.innerHTML = `<strong style="color: #4b4a4d; font-weight: bold;">${message.data.username}:</strong> <span style="color: green; font-weight: lighter;">${message.data.text}</span>`;
           messages.appendChild(messageElement);
           chatBody.scrollTop = chatBody.scrollHeight; // Auto scroll to bottom
         });
