@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" type="image/gif/png" href="logoperma.png">
+  <link rel="icon" type="image/gif/png" href="logoperma.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>home Page - State</title>
+  <title>Home Page - State</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
       background-image: url('background02052025.PNG');
-            background-size: cover;
-            height: 100vh;
-            overflow: hidden;
+      background-size: cover;
+      height: 100vh;
+      overflow: hidden;
     }
 
     .chat-container {
@@ -29,12 +29,12 @@
       cursor: move;
       display: flex;
       flex-direction: column;
-      transition: all 0.3s ease; /* Smooth transition for minimizing */
+      transition: all 0.3s ease;
     }
 
     .chat-header {
       background: #004C46;
-      color: rgb(250, 246, 246);
+      color: white;
       padding: 5px;
       font-size: 10px;
       display: flex;
@@ -60,11 +60,16 @@
       padding: 12px;
       background: #f4f4f4;
       border-bottom: 1px solid #ddd;
+      max-height: 150px;
     }
 
-    .displayMessage {
-        font-size: 12px;
-        color: #959399
+    .displayMessage div {
+      font-size: 12px;
+      margin-bottom: 8px; /* Spacing between messages */
+      padding: 5px;
+      border-radius: 5px;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
     .chat-footer {
@@ -78,8 +83,8 @@
       padding: 5px;
       border: 1px solid #ddd;
       border-radius: 5px;
-      height: 10px;
-      width:100px ;
+      height: 15px;
+      width: 100px;
     }
 
     #send-button {
@@ -100,12 +105,12 @@
 
     /* Collapsed state (minimized) */
     .collapsed {
-      height: 40px; /* Adjusted minimized height */
+      height: 40px;
       overflow: hidden;
     }
 
     .collapsed .chat-body {
-      display: none; /* Hide the message area when minimized */
+      display: none;
     }
   </style>
 </head>
@@ -136,7 +141,6 @@
       return `${color}${animal}${number}`;
     };
 
-    // Set the random name for the user
     const username = generateRandomName();
 
     // Initialize Scaledrone with your room name and channel
@@ -161,14 +165,17 @@
         // Listen for messages
         room.on('message', (message) => {
           const messageElement = document.createElement('div');
-          messageElement.innerHTML = `<strong style="color: #4b4a4d; font-weight: bold;">${message.data.username}:</strong> <span style="color: #4b4a4d; font-weight: normal;">${message.data.text}</span>`;
+          messageElement.classList.add("chat-message");
+          messageElement.innerHTML = `
+            <strong style="color: #4b4a4d; font-weight: bold;">${message.data.username}:</strong> 
+            <span style="color: #4b4a4d; font-weight: normal;">${message.data.text}</span>`;
           messages.appendChild(messageElement);
-          chatBody.scrollTop = chatBody.scrollHeight; // Auto scroll to bottom
+          chatBody.scrollTop = chatBody.scrollHeight;
         });
       }
     });
 
-    // Send a message to the room
+    // Send a message
     document.getElementById('send-button').addEventListener('click', () => {
       const messageInput = document.getElementById('message-input');
       const messageText = messageInput.value.trim();
@@ -178,18 +185,18 @@
           room: 'Red_Room',
           message: { text: messageText, username: username },
         });
-        messageInput.value = ''; // Clear input after sending
+        messageInput.value = ''; // Clear input
       }
     });
 
-    // Handle pressing 'Enter' key to send a message
+    // Press Enter to send a message
     document.getElementById('message-input').addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
         document.getElementById('send-button').click();
       }
     });
 
-    // Minimize the chat window by hiding the top section
+    // Minimize chat window
     minimizeButton.addEventListener('click', () => {
       if (isMinimized) {
         chatContainer.classList.remove('collapsed');
@@ -201,7 +208,7 @@
       isMinimized = !isMinimized;
     });
 
-    // Draggable functionality
+    // Make chat draggable
     let isDragging = false;
     let offsetX, offsetY;
 
@@ -216,8 +223,6 @@
         if (isDragging) {
             const x = e.clientX - offsetX;
             const y = e.clientY - offsetY;
-
-            // Prevent chat window from going out of bounds
             const maxX = window.innerWidth - chatContainer.offsetWidth - 10;
             const maxY = window.innerHeight - chatContainer.offsetHeight - 10;
             
@@ -233,4 +238,3 @@
   </script>
 </body>
 </html>
- 
