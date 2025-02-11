@@ -117,7 +117,7 @@
 <body>
   <div class="chat-container" id="chat-container">
     <div class="chat-header">
-      <span>Pastor Messaging</span>
+      <span>Pastor Messaging</span> <span id="counter"></span>
       <button id="minimize-button">−</button>
     </div>
     <div class="chat-body" id="chat-body">
@@ -235,6 +235,18 @@
         isDragging = false;
         chatContainer.style.cursor = "move";
     });
+
+  // Check if counter exists in localStorage, if not, set it to 0
+  if (!localStorage.getItem("pageViews")) {
+    localStorage.setItem("pageViews", 0);
+  }
+
+  // Increment the counter
+  let pageViews = parseInt(localStorage.getItem("pageViews")) + 1;
+  localStorage.setItem("pageViews", pageViews);
+
+  // Display the counter
+  document.getElementById("counter").innerText = pageViews;
   </script>
 </body>
 </html>
